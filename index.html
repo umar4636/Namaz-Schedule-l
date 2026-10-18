@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#073b4c"><title>Namaz Schedule</title>
+<style>
+:root{--navy:#073b4c;--green:#078b50;--brightgreen:#16a34a;--red:#e7353d;--ink:#10233f;--muted:#61738c}
+*{box-sizing:border-box}body{margin:0;background:#f3f8fc;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(135deg,#073b4c,#0b5965);color:#fff;padding:18px 14px;text-align:center;position:sticky;top:0;z-index:3}header h1{font-size:21px;margin:0 0 3px}header p{font-size:12px;margin:0;opacity:.85}
+main{max-width:760px;margin:auto;padding:13px 12px 86px}.panel{background:white;border:1px solid #deebf4;border-radius:17px;padding:14px;margin-bottom:13px;box-shadow:0 3px 12px #173b5110}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{display:block;font-size:12px;color:var(--muted);font-weight:750;margin-bottom:5px}select,button{font:inherit}select{width:100%;border:1px solid #cbdbe8;background:#fff;border-radius:10px;padding:11px;color:var(--ink)}.primary{width:100%;margin-top:11px;padding:12px;border:0;border-radius:11px;background:var(--green);color:#fff;font-weight:800}
+h2{font-size:18px;margin:0}.month-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.day{border:1px solid #e0ebf3;border-radius:13px;padding:11px;margin:9px 0;background:#fff}.dayhead{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:800;margin-bottom:9px;cursor:pointer}
+.prayers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.prayer{position:relative;border:0;border-radius:9px;padding:9px 1px;color:#fff;font-size:11px;font-weight:800;min-height:38px;background:#078b50}.prayer.qaza{background:var(--red)}.prayer .qaza-done-tick{position:absolute;top:-7px;left:25%;color:#16a34a;font-size:25px;line-height:1;font-weight:1000;text-shadow:0 1px 1px #fff,1px 0 1px #fff;transform:rotate(-12deg);pointer-events:none}.prayer:active{transform:scale(.97)}
+.daily{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid #e0ebf3;border-radius:13px;margin:9px 0;background:#fff}.ico{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#dcfce7;font-size:22px;flex-shrink:0}.ico.qaza{background:#fee2e2}.ico.night{background:#e0edff}.info{flex:1;min-width:0}.info strong{display:block;font-size:14px}.info small{color:var(--muted)}
+.status{border:0;border-radius:999px;padding:8px 10px;font-size:12px;font-weight:850;min-width:94px}.status.hazir{background:#dcfce7;color:#166534}.status.qaza{background:#fee2e2;color:#b91c1c}.tick{color:#16a34a;font-size:17px;font-weight:1000;text-shadow:0 0 .4px currentColor}
+.back{border:0;border-radius:10px;background:#e2f0ff;padding:9px 12px;color:#153d5d;font-weight:750}
+.note{text-align:center;font-size:12px;color:var(--muted);margin:8px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #dce8f2;display:flex;justify-content:space-around;padding:9px 6px calc(8px + env(safe-area-inset-bottom));z-index:4}nav button{border:0;background:transparent;color:var(--muted);font-weight:750;font-size:12px;padding:4px 18px}
+.overlay{display:none;position:fixed;inset:0;background:#061b2ccc;z-index:10;align-items:center;justify-content:center;padding:18px}.overlay.show{display:flex}.modal{width:min(360px,100%);background:#fff;border-radius:20px;padding:17px;box-shadow:0 20px 70px #0004}.modalhead{display:flex;align-items:center;gap:10px}.modalhead .ico{background:#e0edff}.modalhead .title{flex:1}.modalhead strong{display:block}.modalhead small{color:var(--muted)}.close{border:0;background:transparent;font-size:25px;color:#64748b}
+.options{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px}.option{display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:2px solid;border-radius:13px;padding:12px;background:white;font-weight:850}.option .symbol{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:24px;font-weight:1000;flex-shrink:0}.option.hazir{border-color:#86efac;background:#f0fdf4;color:#166534}.option.hazir .symbol{background:#16a34a;color:white}.option.qaza{border-color:#fca5a5;background:#fff1f2;color:#b91c1c}.option.qaza .symbol{background:#ef3038;color:white}.option small{display:block;font-weight:500;margin-top:2px}.qaza-sub{display:none;border:2px solid #fca5a5;background:#fff1f2;border-radius:14px;padding:12px;margin-top:12px}.qaza-sub.show{display:block}.qaza-sub h3{font-size:15px;color:#b91c1c;margin:0 0 9px}.subbtn{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border:1.5px solid;border-radius:10px;margin:7px 0;background:#fff;font-weight:850;text-align:left}.subbtn .symbol{font-size:25px;font-weight:1000;width:30px;text-align:center}.subbtn.tickopt{border-color:#86efac;color:#166534;background:#f0fdf4}.subbtn.crossopt{border-color:#fca5a5;color:#b91c1c;background:#fff7f7}.dismiss{width:100%;border:0;border-radius:10px;background:#e8eef4;color:#334155;padding:11px;margin-top:12px;font-weight:800}
+</style></head><body>
+<header><h1>☾ Namaz Schedule</h1><p>Monthly Prayer Tracker</p></header>
+<main>
+<section class="panel"><div class="controls"><div><label for="month">MONTH</label><select id="month"></select></div><div><label for="year">YEAR</label><select id="year"></select></div></div><button class="primary" id="view">View Schedule</button></section>
+<section class="panel" id="calendar"><div class="month-title"><h2 id="monthTitle">Monthly Schedule</h2><span>📅</span></div><div id="days"></div></section>
+<section class="panel" id="detail" hidden><div class="month-title"><button class="back" id="back">← Calendar</button><h2 id="dayTitle"></h2></div><div id="prayerDetails"></div></section>
+<p class="note">Green = Hazir Waqt · Red = Qaza · ✓ = Qaza ada kar li · ✕ = Qaza baqi hai</p>
+</main><nav><button id="home">⌂<br>Home</button><button id="calendarNav">▦<br>Calendar</button><button id="settings">⚙<br>Settings</button></nav>
+<div class="overlay" id="overlay"><div class="modal">
+<div class="modalhead"><div class="ico" id="modalIcon">🌅</div><div class="title"><strong id="modalPrayer">Maghrib</strong><small id="modalTime">6:58 PM</small></div><button class="close" id="close">×</button></div>
+<div class="options">
+<button class="option hazir" id="hazir"><span class="symbol">✓</span><span>Hazir Waqt<small>Namaz waqt par ada kar li</small></span></button>
+<button class="option qaza" id="qaza"><span class="symbol">✕</span><span>Qaza<small>Qaza status select karein</small></span></button>
+</div>
+<div class="qaza-sub" id="qazaSub"><h3>Qaza status</h3>
+<button class="subbtn tickopt" id="qazaTick"><span class="symbol tick">✓</span><span>Qaza Tick<small>Qaza namaz ada kar li</small></span></button>
+<button class="subbtn crossopt" id="qazaCross"><span class="symbol">✕</span><span>Qaza Cross<small>Qaza abhi baqi hai</small></span></button>
+</div><button class="dismiss" id="dismiss">Cancel</button>
+</div></div>
+<script>
+const names=["Fajr","Dhuhr","Asr","Maghrib","Isha"],times=["5:12 AM","12:45 PM","4:32 PM","6:58 PM","8:20 PM"],months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const $=id=>document.getElementById(id),m=$("month"),y=$("year");let activeDay=null,activePrayer=null;
+months.forEach((n,i)=>m.add(new Option(n,i)));for(let yr=2020;yr<=2050;yr++)y.add(new Option(yr,yr));let now=new Date();m.value=now.getMonth();y.value=now.getFullYear();
+function key(d,p){return `namaz-v2-${y.value}-${m.value}-${d}-${p}`}
+function status(d,p){return localStorage.getItem(key(d,p))||"qaza-cross"}
+function save(s){localStorage.setItem(key(activeDay,activePrayer),s);$("overlay").classList.remove("show");$("qazaSub").classList.remove("show");render();if(!$("detail").hidden)openDay(activeDay)}
+function days(){return new Date(+y.value,+m.value+1,0).getDate()}
+function label(d){return new Date(+y.value,+m.value,d).toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
+function render(){$("monthTitle").textContent=`${months[+m.value]} ${y.value}`;$("days").innerHTML="";for(let d=1;d<=days();d++){let box=document.createElement("div");box.className="day";let head=document.createElement("div");head.className="dayhead";head.innerHTML=`<span>${label(d)}</span><span>View day ›</span>`;head.onclick=()=>openDay(d);let buttons=document.createElement("div");buttons.className="prayers";names.forEach(p=>{let s=status(d,p),b=document.createElement("button");b.className="prayer "+(s==="hazir"?"":"qaza");b.textContent=p;if(s==="qaza-tick"){let tick=document.createElement("span");tick.className="qaza-done-tick";tick.textContent="✓";b.append(tick)}b.onclick=()=>openPopup(d,p);buttons.append(b)});box.append(head,buttons);$("days").append(box)}}
+function openDay(d){activeDay=d;$("calendar").hidden=true;$("detail").hidden=false;$("dayTitle").textContent=label(d);$("prayerDetails").innerHTML="";names.forEach((p,i)=>{let s=status(d,p),row=document.createElement("div");row.className="daily";let ic=document.createElement("div");ic.className="ico "+(s==="hazir"?"": "qaza")+" "+(i===4?"night":"");ic.textContent=["🌄","☀️","🌤️","🌅","🌙"][i];let info=document.createElement("div");info.className="info";info.innerHTML=`<strong>${p}</strong><small>${times[i]}</small>`;let b=document.createElement("button");b.className="status "+(s==="hazir"?"hazir":"qaza");b.innerHTML=s==="hazir"?"✓ Hazir Waqt":s==="qaza-tick"?"<span class='tick'>✓</span> Qaza":"✕ Qaza";b.onclick=()=>openPopup(d,p);row.append(ic,info,b);$("prayerDetails").append(row)})}
+function openPopup(d,p){activeDay=d;activePrayer=p;let i=names.indexOf(p);$("modalPrayer").textContent=p;$("modalTime").textContent=times[i];$("qazaSub").classList.remove("show");$("overlay").classList.add("show")}
+$("hazir").onclick=()=>save("hazir");$("qaza").onclick=()=>$("qazaSub").classList.toggle("show");$("qazaTick").onclick=()=>save("qaza-tick");$("qazaCross").onclick=()=>save("qaza-cross");
+function close(){ $("overlay").classList.remove("show");$("qazaSub").classList.remove("show") }$("close").onclick=close;$("dismiss").onclick=close;
+$("view").onclick=()=>{$("detail").hidden=true;$("calendar").hidden=false;render()};$("back").onclick=()=>{$("detail").hidden=true;$("calendar").hidden=false;render()};$("home").onclick=$("calendarNav").onclick=()=>{$("detail").hidden=true;$("calendar").hidden=false;render()};$("settings").onclick=()=>alert("Month aur year upar se change karein. Statuses is browser mein save hote hain.");m.onchange=render;y.onchange=render;render();
+</script></body></html>
