@@ -1,4 +1,8 @@
-
+      - name: Check project folders
+        run: |
+          pwd
+          ls -la
+          find . -maxdepth 3 -name build.gradle -o -name settings.gradle
 name: Build Namaz Schedule APK
 
 on:
